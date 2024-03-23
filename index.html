@@ -63,8 +63,7 @@
         }
 
         .generate-btn,
-        .download-btn,
-        .guide-btn {
+        .download-btn {
             margin-top: 20px;
             color: #ffffff;
             border-radius: 5px;
@@ -85,14 +84,8 @@
             margin-bottom: 20px;
         }
 
-        .guide-btn {
-            background-color: #7733FF;
-            border: 1px solid #7733FF;
-        }
-
         .generate-btn:hover,
-        .download-btn:hover,
-        .guide-btn:hover {
+        .download-btn:hover {
             background-color: #5a2ee2;
             border: 1px solid #5a2ee2;
         }
@@ -125,8 +118,6 @@
             <div id="qrCode" class="qr-code"></div>
             <!-- Download button -->
             <a href="#" id="downloadLink" class="download-btn btn btn-lg btn-block">Download QR Code</a>
-            <!-- New button for guide video -->
-            <button class="guide-btn btn btn-lg btn-block" onclick="openGuideVideo()">See the guide video</button>
         </div>
     </div>
 
@@ -168,16 +159,11 @@
             // Set download link download attribute to trigger automatic download
             document.getElementById('downloadLink').setAttribute('download', 'QR_Code.png');
         }
-
-        // Function to open guide video
-        function openGuideVideo() {
-            window.open('https://drive.google.com/file/d/1-rpFKz0Wp9pWE5HjmiGn8o_DyjM8pJpv/view?usp=sharing', '_blank');
-        }
     </script>
 
     <!-- Footer -->
     <footer>
-        Made with ❤️ by Nilam Direct Business
+        Made with ❤️ by Nilam Direct Payments Corp.
     </footer>
 </body>
 </html>
