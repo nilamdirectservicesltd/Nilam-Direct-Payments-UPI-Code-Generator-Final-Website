@@ -47,7 +47,7 @@
 
         .qr-code-container {
             text-align: center;
-            max-width: 300px; /* Adjust as needed */
+            max-width: 150px; /* Adjust as needed */
             margin: 0 auto; /* Center the container */
         }
 
@@ -93,6 +93,12 @@
         .download-btn:hover {
             background-color: #5a2ee2;
             border: 1px solid #5a2ee2;
+        }
+
+        @media (max-width: 576px) {
+            .custom-label {
+                padding: 20px;
+            }
         }
     </style>
 </head>
@@ -147,8 +153,8 @@
             // Construct the UPI link
             var upiLink = 'upi://pay?pa=' + upiId + '&pn=' + bankingName + '&am=' + amount + '&cu=INR';
             
-            // Generate the QR code using Google Chart API
-            var qrCodeUrl = 'https://chart.googleapis.com/chart?cht=qr&chs=200x200&chl=' + encodeURIComponent(upiLink);
+            // Generate the QR code using qrserver.com API
+            var qrCodeUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=' + encodeURIComponent(upiLink);
             
             // Set the QR code image source
             document.getElementById('qrCodeImg').src = qrCodeUrl;
