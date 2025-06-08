@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nilam Direct Payments UPI Code generator</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Animate.css for smooth animations -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #ECFAE5;
+            font-family: 'Arial', sans-serif;
+            transition: background-color 0.8s ease;
+        }
+
+        body:hover {
+            background-color: #DDF6D2;
+        }
+
+        .custom-container {
+            margin-top: 50px;
+            animation: fadeIn 1.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .custom-label {
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(176, 219, 156, 0.3);
+            transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+            border: 1px solid #CAE8BD;
+        }
+
+        .custom-label:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(176, 219, 156, 0.4);
+        }
+
+        .custom-label h1 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: #2c3e50;
+            transition: color 0.3s ease;
+        }
+
+        .custom-label:hover h1 {
+            color: #5a2ee2;
+        }
+
+        .custom-label p {
+            font-size: 18px;
+            margin-bottom: 30px;
+            color: #7f8c8d;
+        }
+
+        .form-group input {
+            font-size: 16px;
+            border-radius: 8px;
+            border: 2px solid #CAE8BD;
+            padding: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            border-color: #6B8E23;
+            box-shadow: 0 0 0 0.2rem rgba(107, 142, 35, 0.25);
+            transform: scale(1.01);
+        }
+
+        .form-group input.invalid {
+            border-color: #ff6b6b;
+            animation: shake 0.5s;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-5px); }
+            40%, 80% { transform: translateX(5px); }
+        }
+
+        .error-message {
+            color: #ff6b6b;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .form-group label {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2c3e50;
+            transition: color 0.3s ease;
+        }
+
+        .form-group:hover label {
+            color: #5a2ee2;
+        }
+
+        .qr-code-container {
+            text-align: center;
+            max-width: 180px;
+            margin: 20px auto;
+            padding: 15px;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: all 0.5s ease;
+            opacity: 0;
+            transform: scale(0.8);
+        }
+
+        .qr-code-container.show {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .qr-code {
+            max-width: 100%;
+            height: auto;
+            transition: transform 0.3s ease;
+        }
+
+        .qr-code:hover {
+            transform: scale(1.05);
+        }
+
+        footer {
+            background-color: #6B8E23;
+            color: white;
+            padding: 15px 0;
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            height: 60px;
+            transition: all 0.5s ease;
+        }
+
+        footer:hover {
+            background-color: #556B2F;
+            height: 65px;
+        }
+
+        .generate-btn,
+        .download-btn,
+        .refresh-btn,
+        .upi-btn {
+            margin-top: 10px;
+            color: white;
+            border-radius: 8px;
+            padding: 12px 25px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            border: none;
+            letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .generate-btn {
+            background-color: #6B8E23;
+            box-shadow: 0 4px 15px rgba(107, 142, 35, 0.4);
+        }
+
+        .download-btn {
+            background-color: #556B2F;
+            box-shadow: 0 4px 15px rgba(85, 107, 47, 0.4);
+            margin-bottom: 10px;
+            display: none;
+        }
+
+        .refresh-btn {
+            background-color: #556B2F;
+            box-shadow: 0 4px 15px rgba(85, 107, 47, 0.4);
+            margin-bottom: 10px;
+            display: none;
+        }
+
+        .upi-btn {
+            background-color: #3A5F0B;
+            box-shadow: 0 4px 15px rgba(58, 95, 11, 0.4);
+            display: none;
+            margin-bottom: 20px;
+        }
+
+        .refresh-btn i,
+        .upi-btn i {
+            margin-right: 8px;
+        }
+
+        .generate-btn:hover,
+        .download-btn:hover,
+        .refresh-btn:hover,
+        .upi-btn:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 8px 25px rgba(85, 107, 47, 0.6);
+        }
+
+        .generate-btn:active,
+        .download-btn:active,
+        .refresh-btn:active,
+        .upi-btn:active {
+            transform: translateY(1px);
+        }
+
+        .generate-btn::after,
+        .download-btn::after,
+        .refresh-btn::after,
+        .upi-btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent 25%, rgba(255,255,255,0.3) 50%, transparent 75%);
+            background-size: 400% 400%;
+            transition: all 0.6s ease;
+            opacity: 0;
+        }
+
+        .generate-btn:hover::after,
+        .download-btn:hover::after,
+        .refresh-btn:hover::after,
+        .upi-btn:hover::after {
+            animation: shine 1.5s ease;
+            opacity: 1;
+        }
+
+        @keyframes shine {
+            0% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @media (max-width: 576px) {
+            .custom-label {
+                padding: 25px;
+                margin: 0 15px;
+            }
+            
+            .custom-container {
+                margin-top: 30px;
+            }
+            
+            footer {
+                font-size: 14px;
+            }
+        }
+
+        /* Floating animation for the container */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .floating {
+            animation: float 6s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="container custom-container floating">
+        <!-- Label with white background -->
+        <div class="custom-label animate__animated animate__fadeInUp">
+            <h1 class="text-center">Nilam Direct Payments Corp.</h1>
+            <p class="lead text-center">NDS Payment Gateway Official QR Code Generator</p>
+            <!-- Text box for entering amount -->
+            <div class="form-group animate__animated animate__fadeInLeft">
+                <label for="amountInput">Enter Amount (₹)</label>
+                <input type="text" class="form-control" id="amountInput" placeholder="Enter amount in ₹">
+                <div class="error-message" id="amountError">Please enter a valid amount</div>
+            </div>
+            <!-- Text box for displaying pre-entered UPI ID -->
+            <div class="form-group animate__animated animate__fadeInRight">
+                <label for="upiIdInput">UPI ID</label>
+                <input type="text" class="form-control" id="upiIdInput" value="nilamdirectpayments@fam" readonly>
+            </div>
+            <!-- Text box for entering banking name -->
+            <div class="form-group animate__animated animate__fadeInLeft">
+                <label for="bankingNameInput">Official Banking Name</label>
+                <input type="text" class="form-control" id="bankingNameInput" value="NILAM RAJ KALITA" readonly>
+            </div>
+            <!-- Generate button -->
+            <button class="generate-btn btn btn-lg btn-block animate__animated animate__pulse" onclick="generateQRCode()">Generate QR Code</button>
+            <!-- Placeholder for QR code -->
+            <div id="qrCode" class="qr-code-container">
+                <img id="qrCodeImg" class="qr-code" alt="QR Code">
+            </div>
+            <!-- Download button -->
+            <a href="#" id="downloadLink" class="download-btn btn btn-lg btn-block">Download QR Code</a>
+            <!-- Open UPI App button -->
+            <button id="upiAppBtn" class="upi-btn btn btn-lg btn-block" onclick="openUPIApp()"><i class="fas fa-external-link-alt"></i> Open UPI App</button>
+            <!-- Refresh button -->
+            <button class="refresh-btn btn btn-lg btn-block" onclick="refreshPage()"><i class="fas fa-sync-alt"></i> Refresh</button>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS (optional) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- JavaScript to generate and download QR code -->
+    <script>
+        // Store the UPI link globally
+        let currentUPILink = '';
+        
+        // Function to validate amount input
+        function validateAmount(amount) {
+            return !isNaN(amount) && amount > 0;
+        }
+
+        // Function to generate QR code
+        function generateQRCode() {
+            // Get the value from the amount input field
+            var amount = document.getElementById('amountInput').value.trim();
+            var amountInput = document.getElementById('amountInput');
+            var errorMessage = document.getElementById('amountError');
+            
+            // Validate amount
+            if (!validateAmount(amount)) {
+                amountInput.classList.add('invalid');
+                errorMessage.style.display = 'block';
+                setTimeout(() => {
+                    amountInput.classList.remove('invalid');
+                }, 500);
+                return;
+            } else {
+                amountInput.classList.remove('invalid');
+                errorMessage.style.display = 'none';
+            }
+            
+            // Get the pre-entered UPI ID
+            var upiId = 'nilamdirectpayments@fam';
+            // Get the pre-entered Banking Name
+            var bankingName = 'NILAM RAJ KALITA';
+
+            // Construct the UPI link
+            currentUPILink = 'upi://pay?pa=' + upiId + '&pn=' + encodeURIComponent(bankingName) + '&am=' + amount + '&cu=INR';
+            
+            // Generate the QR code using qrserver.com API
+            var qrCodeUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' + encodeURIComponent(currentUPILink);
+            
+            // Set the QR code image source
+            var qrImg = document.getElementById('qrCodeImg');
+            qrImg.src = qrCodeUrl;
+            
+            // Show QR code container with animation
+            var qrContainer = document.getElementById('qrCode');
+            qrContainer.classList.add('show');
+            
+            // Show buttons with animation
+            var downloadBtn = document.getElementById('downloadLink');
+            var upiBtn = document.getElementById('upiAppBtn');
+            var refreshBtn = document.querySelector('.refresh-btn');
+            
+            downloadBtn.style.display = 'block';
+            upiBtn.style.display = 'block';
+            refreshBtn.style.display = 'block';
+            
+            downloadBtn.classList.add('animate__fadeInUp');
+            upiBtn.classList.add('animate__fadeInUp');
+            refreshBtn.classList.add('animate__fadeInUp');
+            
+            // Set download link href to the QR code image source
+            downloadBtn.href = qrCodeUrl;
+            // Set download link download attribute to trigger automatic download
+            downloadBtn.setAttribute('download', 'Nilam_Payment_QR_Code.png');
+            
+            // Smooth scroll to QR code
+            qrContainer.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Function to open UPI app
+        function openUPIApp() {
+            if (!currentUPILink) {
+                alert('Please generate a QR code first');
+                return;
+            }
+            
+            // Try to open the UPI link directly
+            window.location.href = currentUPILink;
+            
+            // Fallback for if the UPI link doesn't work
+            setTimeout(function() {
+                window.location.href = 'https://play.google.com/store/search?q=upi&c=apps';
+            }, 500);
+        }
+
+        // Function to refresh the page
+        function refreshPage() {
+            location.reload();
+        }
+        
+        // Add animation to elements when they come into view
+        document.addEventListener('DOMContentLoaded', function() {
+            const animateElements = document.querySelectorAll('.animate__animated');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = 1;
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            animateElements.forEach(el => {
+                observer.observe(el);
+                el.style.opacity = 0;
+            });
+
+            // Add input validation on keyup
+            document.getElementById('amountInput').addEventListener('keyup', function() {
+                if (!validateAmount(this.value.trim())) {
+                    this.classList.add('invalid');
+                    document.getElementById('amountError').style.display = 'block';
+                } else {
+                    this.classList.remove('invalid');
+                    document.getElementById('amountError').style.display = 'none';
+                }
+            });
+        });
+    </script>
+
+    <!-- Footer -->
+    <footer class="animate__animated animate__fadeInUp">
+        Made with ❤️ by Nilam Direct Payments Corp.
+    </footer>
+</body>
+</html>
